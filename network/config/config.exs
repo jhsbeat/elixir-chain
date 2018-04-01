@@ -20,6 +20,8 @@ use Mix.Config
 #
 #     config :logger, level: :info
 #
+config :network, :server,
+  port: String.to_integer(System.get_env("PORT") || "5555")
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment
