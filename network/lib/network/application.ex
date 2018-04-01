@@ -6,10 +6,11 @@ defmodule Network.Application do
   use Application
 
   def start(_type, _args) do
+    config = Application.get_env(:network, :server)
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: Network.Worker.start_link(arg)
-      # {Network.Worker, arg},
+      {Network.Server, config}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
