@@ -1,2 +1,4 @@
-# elixir-chain
-An elixir version of blockchain implementation.
+# ElixirChain
+
+**TODO: Add description**
+
