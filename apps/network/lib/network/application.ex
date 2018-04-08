@@ -10,7 +10,11 @@ defmodule Network.Application do
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: Network.Worker.start_link(arg)
-      {Network.Server, config}
+
+      # A server that accepts peer's incoming connection.
+      {Network.Server, config},
+      # A supervisor to track connected peers.
+      {Network.PeerTracker, config}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
