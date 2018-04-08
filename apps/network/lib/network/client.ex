@@ -12,11 +12,11 @@ defmodule Network.Client do
     end)
 
     opts = [:binary, packet: 4, active: true]
+
     with {:ok, socket} <- :gen_tcp.connect(to_charlist(host), port, opts) do
       {:ok, pid} = PeerTracker.add_peer(socket, :gen_tcp)
       :gen_tcp.controlling_process(socket, pid)
       {:ok, pid}
     end
   end
-
 end

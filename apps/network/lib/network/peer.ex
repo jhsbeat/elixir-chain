@@ -1,7 +1,7 @@
 defmodule Network.Peer do
   @moduledoc """
   A GenServer that handles a peer's connection and communication in/out.
-  
+
   use GenServer, restart: :temporary: 
     the child process is never restarted, regardless of the supervision strategy.
   """
@@ -12,6 +12,7 @@ defmodule Network.Peer do
     Logger.debug(fn ->
       "Network.Peer.start_link(#{inspect(a)}, #{inspect(args)})"
     end)
+
     GenServer.start_link(__MODULE__, args)
   end
 
@@ -19,6 +20,7 @@ defmodule Network.Peer do
     Logger.debug(fn ->
       "Network.Peer.init(#{inspect(socket)}, #{inspect(transport)}, #{peername})"
     end)
+
     {:ok, %{socket: socket, transport: transport, peername: peername}}
   end
 
@@ -26,18 +28,17 @@ defmodule Network.Peer do
     Logger.debug(fn ->
       "Network.Peer.send_message(#{inspect(pid)}, #{inspect(message)})"
     end)
+
     GenServer.call(pid, {:send_message, message})
   end
 
   # Server 
 
-  def handle_call(
-        {:send_message, message}, 
-        _, 
-        %{socket: socket, transport: transport} = state) do
+  def handle_call({:send_message, message}, _, %{socket: socket, transport: transport} = state) do
     Logger.info(fn ->
       "Sending message #{inspect(message)} to #{inspect(socket)}"
     end)
+
     # Send the message
     transport.send(socket, message)
 
@@ -45,8 +46,8 @@ defmodule Network.Peer do
   end
 
   def handle_info(
-        {:tcp, _, message}, 
-        %{socket: socket, transport: transport, peername: peername} = state
+        {:tcp, _, message},
+        %{socket: _socket, transport: _transport, peername: peername} = state
       ) do
     Logger.info(fn ->
       "Received a new message from #{peername}: #{inspect(message)}."
@@ -70,6 +71,4 @@ defmodule Network.Peer do
 
     {:stop, :normal, state}
   end
-
-  
 end

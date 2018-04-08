@@ -7,7 +7,7 @@ defmodule Network.ServerProtocol do
   require Logger
 
   @behaviour :ranch_protocol
-  
+
   # Client
 
   @doc """
@@ -17,8 +17,11 @@ defmodule Network.ServerProtocol do
   """
   def start_link(ref, socket, transport, opts) do
     Logger.debug(fn ->
-      "Network.Handler.start_link(#{inspect(ref)}, #{inspect(socket)}, #{inspect(transport)}, #{inspect(opts)})"
+      "Network.Handler.start_link(#{inspect(ref)}, #{inspect(socket)}, #{inspect(transport)}, #{
+        inspect(opts)
+      })"
     end)
+
     peername = stringify_peername(socket)
     pid = :proc_lib.spawn_link(__MODULE__, :init, [ref, socket, transport, peername])
     {:ok, pid}
@@ -30,7 +33,6 @@ defmodule Network.ServerProtocol do
   enters the `:gen_server` receive loop with `:gen_server.enter_loop/3`.
   """
   def init(ref, socket, transport, peername) do
-
     Logger.info(fn ->
       "Peer #{peername} connecting..."
     end)
@@ -42,5 +44,4 @@ defmodule Network.ServerProtocol do
 
     :ranch_tcp.controlling_process(socket, pid)
   end
-
 end

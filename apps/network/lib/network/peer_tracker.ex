@@ -11,6 +11,7 @@ defmodule Network.PeerTracker do
     Logger.debug(fn ->
       "Network.PeerTracker.start_link(#{inspect(args)})"
     end)
+
     Supervisor.start_link(__MODULE__, args, name: __MODULE__)
   end
 
@@ -18,18 +19,23 @@ defmodule Network.PeerTracker do
     Logger.debug(fn ->
       "Network.PeerTracker.init(#{inspect(args)})"
     end)
+
     Supervisor.init([Peer], strategy: :simple_one_for_one)
   end
 
   @doc """
-  
+
   """
   def add_peer(socket, transport) do
     Logger.debug(fn ->
       "Network.PeerTracker.add_peer(#{inspect(socket)}, #{inspect(transport)})"
     end)
+
     peername = stringify_peername(socket)
-    Supervisor.start_child(__MODULE__, [[socket: socket, transport: transport, peername: peername]])  
+
+    Supervisor.start_child(__MODULE__, [
+      [socket: socket, transport: transport, peername: peername]
+    ])
   end
 
   def list_peers do
@@ -37,5 +43,4 @@ defmodule Network.PeerTracker do
     |> Supervisor.which_children()
     |> Enum.map(fn {_, pid, _, _} -> pid end)
   end
-
 end

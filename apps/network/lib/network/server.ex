@@ -13,9 +13,10 @@ defmodule Network.Server do
     Logger.debug(fn ->
       "Network.Server.start_link(#{inspect(args)})"
     end)
+
     GenServer.start_link(__MODULE__, args, name: __MODULE__)
   end
-  
+
   @doc """
   Initiate the listener (socket accpetor pool).
   """
@@ -23,6 +24,7 @@ defmodule Network.Server do
     Logger.debug(fn ->
       "Network.Server.init(port: #{port})"
     end)
+
     opts = [{:port, port}]
 
     # start_listener(Ref, Transport, TransOpts, Protocol, ProtoOpts)
